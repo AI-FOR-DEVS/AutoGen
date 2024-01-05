@@ -1,8 +1,16 @@
 from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager, config_list_from_json
 from search import search, search_declaration
 from flask import Flask, jsonify, request, render_template
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
+socket_io = SocketIO(app)
+
+def new_print_received_message(self, message, sender):
+    print(f"PATCHED {sender.name}: {message.get('content')}")
+    socket_io.emit('message', {"sender": sender.name, "content": message.get('content')})
+
+GroupChatManager._print_received_message = new_print_received_message
 
 assistant = AssistantAgent('assistant', llm_config={"functions": [search_declaration], "config_list": config_list_from_json("OAI_CONFIG_LIST")})
 

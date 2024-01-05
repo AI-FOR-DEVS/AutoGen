@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Stock Price Query</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>
     <script>
+
+        const socket = io()
+        socket.on('message', function(data){
+            const newDiv = document.createElement('div');
+            newDiv.textContent = data.sender + ": " + data.content;
+            document.getElementById('result').appendChild(newDiv)
+        })
+
         function triggerEndpoint() {
             var stockName = document.getElementById('stockName').value;
             fetch('/run?stock=' + stockName)
