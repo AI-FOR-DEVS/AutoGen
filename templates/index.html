@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Price Query</title>
+    <script>
+        function triggerEndpoint() {
+            var stockName = document.getElementById('stockName').value;
+            fetch('/run?stock=' + stockName)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <h1>Query Stock Price</h1>
+    <input type="text" id="stockName" placeholder="Enter stock name (e.g., AAPL)">
+    <button onclick="triggerEndpoint()">Get Stock Price</button>
+    <pre id="result"></pre>
+</body>
+</html>
